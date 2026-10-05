@@ -4,11 +4,16 @@ def create_tensor(method: str, shape: list, value: float = 0.0) -> torch.Tensor:
     """
     Returns a float32 tensor with the requested shape.
     """
-    assert method in ["ones", "zeros" , "full"]
-    if method == "ones":
-        tens = torch.ones(shape, dtype = torch.float32)
-    elif method == "zeros":
-       tens = torch.zeros(shape, dtype =torch.float32) 
+    if method == "zeros":
+        return torch.zeros(shape, dtype=torch.float32)
+    elif method == "ones":
+        return torch.ones(shape, dtype=torch.float32)
     elif method == "full":
-        tens = torch.ones(shape, dtype =torch.float32  ) *value
-    return tens 
+        return torch.full(shape, value, dtype=torch.float32)
+    elif method == "eye":
+        return torch.eye(shape[0])
+    elif method == "arange":
+        return torch.arange(0,shape[0])
+    elif method == "linspace":
+        return torch.linspace(0, 1, shape[0])
+        
