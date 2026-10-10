@@ -4,16 +4,14 @@ def activate(x: torch.Tensor, method: str = "relu") -> torch.Tensor:
     """
     Returns a float32 tensor with the same shape as x.
     """
+    x = x.to(torch.float32)
     if method == 'relu':
-        act = torch.clamp(x,0 )
-    if method == "sigmoid":
-        act = 1/(1+torch.exp(-x))
-    if method == "tanh":
-        act = torch.where(
-            x >= 0,
-            (1 - torch.exp(-2*x)) / (1 + torch.exp(-2*x)),
-            (torch.exp(2*x) - 1) / (torch.exp(2*x) + 1)
-        )
-    if method == "leaky_relu":
-        act = torch.clamp(x, 0.01 *x)
-    return act
+        return torch.clamp(x, min=0)
+    elif method == "sigmoid":
+        e = torch.exp(-x)
+        return (1/ ( 1 + e))
+    elif method == "tanh":
+        e = torch.exp(-2 * x)
+        return (2/ (1 + e)) - 1
+    elif method == "leaky_relu":
+        return torch.where(x>0, x, 0.01*x)
