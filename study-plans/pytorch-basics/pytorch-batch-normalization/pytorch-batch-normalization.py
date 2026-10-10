@@ -1,8 +1,10 @@
 import torch
 
 def batch_norm(X: torch.Tensor, gamma: torch.Tensor, beta: torch.Tensor, eps: float = 1e-5) -> torch.Tensor:
-    # X shape (N, D)
-    mean = X.mean(dim=0, keepdim = True) # shape (1, D)
-    std_div = X.std(dim =0, keepdim = True, unbiased = False) # shape (1, D) 
-    y = gamma*((X-mean)/(torch.sqrt(std_div**2+ eps))) + beta
-    return y
+    """
+    Returns a float32 tensor with the same shape as X.
+    """
+    mean = X.mean(dim=0, keepdim=True)
+    var = X.var(dim=0, keepdim=True, unbiased=False)
+    Y = gamma*(X - mean)*((var + eps)**-0.5) + beta
+    return Y
